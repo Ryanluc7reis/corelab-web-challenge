@@ -6,7 +6,7 @@ const StyledTextarea = styled.textarea`
   width: 100%;
   padding: 15px;
   border-radius: 10px;
-  font-family: Inter;
+  font-family: sans-serif;
   font-size: 13px;
   font-weight: 400;
   line-height: 15.73px;

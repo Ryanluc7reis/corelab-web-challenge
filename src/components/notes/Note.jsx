@@ -1,11 +1,12 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
-import { useState } from 'react'
 
 import { Input } from '../form/Input'
 import Textarea from '../form/Textarea'
+import EditPaint from './EditPaint'
 
 const NoteContainer = styled.div`
+  position: relative;
   width: 80%;
   height: 337.59px;
   border-radius: 25px;
@@ -64,15 +65,25 @@ export default function Note() {
   const [isFavorite, setIsFavorite] = useState(false)
   const [isEditNote, setIsEditNote] = useState(false)
   const [isEditPaint, setIsEditPaint] = useState(false)
+  const [currentColor, setCurrentColor] = useState(null)
 
+  const EditingNote = () => {
+    setIsEditNote(!isEditNote)
+  }
+  const EditingPaint = () => {
+    setIsEditPaint(!isEditPaint)
+  }
+  const EditingFavorite = () => {
+    setIsFavorite(!isFavorite)
+  }
   return (
-    <NoteContainer>
+    <NoteContainer style={{ background: currentColor }}>
       <StyledFlex>
         <InputAlt placeholder="Título" />
         {isFavorite ? (
-          <Image onClick={() => setIsFavorite(!isFavorite)} src="estrelaYellow.png" />
+          <Image onClick={EditingFavorite} src="estrelaYellow.png" />
         ) : (
-          <Image onClick={() => setIsFavorite(!isFavorite)} src="estrela.png" />
+          <Image onClick={EditingFavorite} src="estrela.png" />
         )}
       </StyledFlex>
       <Barra />
@@ -81,19 +92,20 @@ export default function Note() {
         <StyledFlexEditing>
           <StyledFlex>
             {isEditNote ? (
-              <ImageAlt onClick={() => setIsEditNote(!isEditNote)} src="edit.png" />
+              <ImageAlt onClick={EditingNote} src="edit.png" />
             ) : (
-              <Image onClick={() => setIsEditNote(!isEditNote)} src="edit.png" />
+              <Image onClick={EditingNote} src="edit.png" />
             )}
             {isEditPaint ? (
-              <ImageAlt onClick={() => setIsEditPaint(!isEditPaint)} src="poteTinta.png" />
+              <ImageAlt onClick={EditingPaint} src="poteTinta.png" />
             ) : (
-              <Image onClick={() => setIsEditPaint(!isEditPaint)} src="poteTinta.png" />
+              <Image onClick={EditingPaint} src="poteTinta.png" />
             )}
           </StyledFlex>
           <Image src="x.png" />
         </StyledFlexEditing>
       </TextareaContainer>
+      {isEditPaint && <EditPaint setCurrentColor={setCurrentColor} />}
     </NoteContainer>
   )
 }

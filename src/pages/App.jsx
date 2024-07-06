@@ -13,6 +13,8 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   padding: 15px 0px;
+  overflow-y: auto;
+  overflow-x: auto;
 `
 const NoteList = styled.div`
   width: 100%;
@@ -22,18 +24,19 @@ const NoteList = styled.div`
   gap: 20px;
   padding: 25px 0px;
 `
-const App = () => (
-  <>
-    <NavBar />
-    <Container>
-      <CreateNote />
-      <NoteList>
-        <Note />
-        <Note />
-        <Note />
-      </NoteList>
-    </Container>
-  </>
-)
-
-export default App
+export default function App() {
+  return (
+    <>
+      <NavBar />
+      <Container>
+        <CreateNote />
+        <NoteList>
+          <Note />
+          <Note />
+          <Note />
+          <Note />
+        </NoteList>
+      </Container>
+    </>
+  )
+}
