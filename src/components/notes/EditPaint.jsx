@@ -34,6 +34,7 @@ const ColorPaint = styled.div`
   width: 36.71px;
   height: 36.71px;
   border-radius: 25px;
+  cursor: pointer;
 `
 
 export default function EditPaint({ ...props }) {
@@ -42,6 +43,7 @@ export default function EditPaint({ ...props }) {
   const getColor = (isColor) => {
     setColor(isColor)
     props.setCurrentColor(isColor)
+    props.closeBoxPaint(isColor)
   }
 
   return (

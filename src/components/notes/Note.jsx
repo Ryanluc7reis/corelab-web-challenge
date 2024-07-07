@@ -26,6 +26,16 @@ const TextareaContainer = styled.div`
   height: 100%;
   justify-content: space-between;
 `
+const Text = styled.h3`
+  font-family: sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 15.73px;
+  text-align: left;
+  width: 100%;
+  padding: 15px;
+  color: rgba(79, 79, 77, 1);
+`
 const StyledFlexEditing = styled.div`
   display: flex;
   align-items: center;
@@ -59,7 +69,9 @@ const Barra = styled.div`
   border: 1px solid rgba(217, 217, 217, 1);
 `
 const TextareaAlt = styled(Textarea)`
-  width: 95%;
+  width: 100%;
+  color: rgba(79, 79, 77, 1);
+  border: ${(props) => (props.isEditing ? '1px solid black' : 'none')};
 `
 export default function Note() {
   const [isFavorite, setIsFavorite] = useState(false)
@@ -76,6 +88,11 @@ export default function Note() {
   const EditingFavorite = () => {
     setIsFavorite(!isFavorite)
   }
+  const CloseBoxPaint = () => {
+    if (currentColor !== null) {
+      setIsEditPaint(false)
+    }
+  }
   return (
     <NoteContainer style={{ background: currentColor }}>
       <StyledFlex>
@@ -88,7 +105,14 @@ export default function Note() {
       </StyledFlex>
       <Barra />
       <TextareaContainer>
-        <TextareaAlt placeholder="Clique ou arraste o arquivo para esta área para fazer upload" />
+        {isEditNote ? (
+          <TextareaAlt
+            isEditing={isEditNote ? true : false}
+            placeholder="Clique ou arraste o arquivo para esta área para fazer upload"
+          />
+        ) : (
+          <Text>Clique ou arraste o arquivo para esta área para fazer upload</Text>
+        )}
         <StyledFlexEditing>
           <StyledFlex>
             {isEditNote ? (
@@ -105,7 +129,7 @@ export default function Note() {
           <Image src="x.png" />
         </StyledFlexEditing>
       </TextareaContainer>
-      {isEditPaint && <EditPaint setCurrentColor={setCurrentColor} />}
+      {isEditPaint && <EditPaint setCurrentColor={setCurrentColor} closeBoxPaint={CloseBoxPaint} />}
     </NoteContainer>
   )
 }

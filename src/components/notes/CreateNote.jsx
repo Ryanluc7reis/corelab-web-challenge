@@ -1,6 +1,5 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
-import { useState } from 'react'
 
 import { Input } from '../form/Input'
 import Textarea from '../form/Textarea'
