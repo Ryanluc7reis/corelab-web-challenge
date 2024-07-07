@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
+import { useForm } from 'react-hook-form'
 
 import { Input } from '../form/Input'
 import Textarea from '../form/Textarea'
@@ -36,6 +37,14 @@ const Text = styled.h3`
   padding: 15px;
   color: rgba(79, 79, 77, 1);
 `
+const Title = styled(Text)`
+  font-size: 14.2px;
+  font-weight: 700;
+  text-align: left;
+  ::placeholder {
+    color: rgba(51, 51, 51, 1);
+  }
+`
 const StyledFlexEditing = styled.div`
   display: flex;
   align-items: center;
@@ -54,6 +63,7 @@ const InputAlt = styled(Input)`
   ::placeholder {
     color: rgba(51, 51, 51, 1);
   }
+  border: ${(props) => (props.isEditing ? '1px solid black' : 'none')};
 `
 const Image = styled.img`
   padding: 7px;
@@ -73,7 +83,7 @@ const TextareaAlt = styled(Textarea)`
   color: rgba(79, 79, 77, 1);
   border: ${(props) => (props.isEditing ? '1px solid black' : 'none')};
 `
-export default function Note() {
+export default function Note({ title, text, favorite, createdDate, color, id, ...props }) {
   const [isFavorite, setIsFavorite] = useState(false)
   const [isEditNote, setIsEditNote] = useState(false)
   const [isEditPaint, setIsEditPaint] = useState(false)
@@ -93,11 +103,16 @@ export default function Note() {
       setIsEditPaint(false)
     }
   }
+  const { control, handleSubmit } = useForm()
   return (
-    <NoteContainer style={{ background: currentColor }}>
+    <NoteContainer {...props} style={{ background: { color } }}>
       <StyledFlex>
-        <InputAlt placeholder="Título" />
-        {isFavorite ? (
+        {isEditNote ? (
+          <InputAlt isEditing={isEditNote ? true : false} placeholder={title} name="title" />
+        ) : (
+          <Title>{title || 'Título'}</Title>
+        )}
+        {favorite ? (
           <Image onClick={EditingFavorite} src="estrelaYellow.png" />
         ) : (
           <Image onClick={EditingFavorite} src="estrela.png" />
@@ -106,12 +121,9 @@ export default function Note() {
       <Barra />
       <TextareaContainer>
         {isEditNote ? (
-          <TextareaAlt
-            isEditing={isEditNote ? true : false}
-            placeholder="Clique ou arraste o arquivo para esta área para fazer upload"
-          />
+          <TextareaAlt isEditing={isEditNote ? true : false} placeholder={text} />
         ) : (
-          <Text>Clique ou arraste o arquivo para esta área para fazer upload</Text>
+          <Text>{text || 'Clique ou arraste o arquivo para esta área para fazer upload'}</Text>
         )}
         <StyledFlexEditing>
           <StyledFlex>

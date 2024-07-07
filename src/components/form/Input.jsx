@@ -1,10 +1,11 @@
 import React from 'react'
 import styled from 'styled-components'
+import { useController } from 'react-hook-form'
 
 const StyledInput = styled.input`
   width: 100%;
   height: auto;
-  border-radius: 3px 0px 0px 0px;
+  border-radius: 3px;
   border: none transparent;
   background: transparent;
   :focus {
@@ -12,6 +13,9 @@ const StyledInput = styled.input`
   }
 `
 
-export const Input = ({ placeholder, ...props }) => {
-  return <StyledInput {...props} placeholder={placeholder} />
+export const Input = ({ placeholder, name, control, defaultValue = '', ...props }) => {
+  const {
+    field: { value, onChange }
+  } = useController({ name, control, defaultValue })
+  return <StyledInput {...props} placeholder={placeholder} value={value} onChange={onChange} />
 }

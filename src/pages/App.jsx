@@ -1,5 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
+import axios from 'axios'
+import useSWR from 'swr'
 
 import CreateNote from '../components/notes/CreateNote'
 import NavBar from '../components/navbar/Navbar'
@@ -50,7 +52,16 @@ const TitleList = styled.h2`
     left: 23%;
   }
 `
+const fetcher = async (url) => {
+  const response = await axios.get(url)
+  return response.data
+}
+
 export default function App() {
+  const { data, error } = useSWR(`http://localhost:4444/getFavoritesNotes`, fetcher)
+
+  if (error) return <h1>Erro ao carregar dados.</h1>
+  if (!data) return <h1>Carregando...</h1>
   return (
     <>
       <NavBar />
@@ -64,10 +75,17 @@ export default function App() {
         </FavoriteList>
         <NoteList>
           <TitleList>Outros</TitleList>
-          <Note />
-          <Note />
-          <Note />
-          <Note />
+          {data.map((note) => (
+            <Note
+              key={note._id}
+              title={note.title}
+              createdDate={note.createdDate}
+              text={note.text}
+              favorite={note.favorite}
+              color={note.color}
+              id={note._id}
+            />
+          ))}
         </NoteList>
       </Container>
     </>
