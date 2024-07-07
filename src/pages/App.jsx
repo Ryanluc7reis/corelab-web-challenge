@@ -12,8 +12,9 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 15px 0px;
+  padding: 35px 0px;
   overflow-x: auto;
+  gap: 60px;
 `
 const NoteList = styled.div`
   width: 100%;
@@ -21,7 +22,7 @@ const NoteList = styled.div`
   justify-content: center;
   flex-wrap: wrap;
   gap: 20px;
-  padding: 25px 0px;
+  padding-bottom: 25px;
 `
 const FavoriteList = styled.div`
   width: 100%;
@@ -29,7 +30,6 @@ const FavoriteList = styled.div`
   justify-content: center;
   flex-wrap: wrap;
   gap: 20px;
-  padding: 25px 0px;
 `
 const TitleList = styled.h2`
   font-family: sans-serif;
