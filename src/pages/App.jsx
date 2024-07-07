@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components'
 import axios from 'axios'
 import useSWR from 'swr'
@@ -52,16 +52,30 @@ const TitleList = styled.h2`
     left: 23%;
   }
 `
-const fetcher = async (url) => {
-  const response = await axios.get(url)
-  return response.data
-}
+
+const fetcher = (url) => fetch(url).then((res) => res.json());
 
 export default function App() {
-  const { data, error } = useSWR(`http://localhost:4444/getFavoritesNotes`, fetcher)
+  const URI_API = process.env.API_URI;
+  const { data: dataFavoriteNotes, error: errorFavoriteNotes } = useSWR(`${URI_API}/getFavoritesNotes`, fetcher)
+  const { data: dataNotes, error: errorNotes } = useSWR(`${URI_API}/getNotes`, fetcher);
+  const [loading, setLoading] = useState(true);
 
-  if (error) return <h1>Erro ao carregar dados.</h1>
-  if (!data) return <h1>Carregando...</h1>
+  useEffect(() => {
+    if (dataFavoriteNotes) {
+      setLoading(false);
+    }
+    if (dataNotes) {
+      setLoading(false);
+    }
+  }, [dataFavoriteNotes, errorFavoriteNotes, dataNotes, errorNotes]);
+ 
+  if (loading)  return <h2>Carregando...</h2>;
+  if (errorFavoriteNotes && errorNotes && loading)  return <h2>Erro ao carregar dados</h2>;
+  
+
+  
+
   return (
     <>
       <NavBar />
@@ -69,25 +83,41 @@ export default function App() {
         <CreateNote />
         <FavoriteList>
           <TitleList>Favoritos</TitleList>
-          <Note />
-          <Note />
-          <Note />
+          {dataFavoriteNotes && dataFavoriteNotes.length > 0 ? (
+            dataFavoriteNotes.map((note) => (
+              <Note
+                key={note._id}
+                title={note.title}
+                createdDate={note.createdDate}
+                text={note.text}
+                favorite={note.isFavorite}
+                color={note.color}
+                id={note._id}
+              />
+            ))
+          ) : (
+            <h3>Tarefas favoritas não encontradas</h3>
+          )}
         </FavoriteList>
         <NoteList>
           <TitleList>Outros</TitleList>
-          {data.map((note) => (
-            <Note
-              key={note._id}
-              title={note.title}
-              createdDate={note.createdDate}
-              text={note.text}
-              favorite={note.favorite}
-              color={note.color}
-              id={note._id}
-            />
-          ))}
+          {dataNotes && dataNotes.length > 0 ? (
+            dataNotes.map((note) => (
+              <Note
+                key={note._id}
+                title={note.title}
+                createdDate={note.createdDate}
+                text={note.text}
+                favorite={note.isFavorite}
+                color={note.color}
+                id={note._id}
+              />
+            ))
+          ) : (
+            <h3>Tarefas não encontradas</h3>
+          )}
         </NoteList>
       </Container>
     </>
-  )
+  );
 }

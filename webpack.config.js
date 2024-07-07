@@ -1,5 +1,6 @@
-const path = require('path')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const Dotenv = require('dotenv-webpack');
 
 module.exports = {
   entry: './src/index.jsx',
@@ -11,7 +12,7 @@ module.exports = {
   devServer: {
     static: path.resolve(__dirname, 'public'),
     port: 3000,
-    open: true,
+    open: false,
     hot: true,
     liveReload: false,
     setupExitSignals: true
@@ -39,6 +40,10 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: './public/index.html'
+    }),
+    new Dotenv({
+      path: './.env',
+      safe: false,
     })
   ]
-}
+};

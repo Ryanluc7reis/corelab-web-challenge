@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { useForm } from 'react-hook-form'
+
 
 import { Input } from '../form/Input'
 import Textarea from '../form/Textarea'
@@ -103,12 +103,12 @@ export default function Note({ title, text, favorite, createdDate, color, id, ..
       setIsEditPaint(false)
     }
   }
-  const { control, handleSubmit } = useForm()
+
   return (
     <NoteContainer {...props} style={{ background: { color } }}>
       <StyledFlex>
         {isEditNote ? (
-          <InputAlt isEditing={isEditNote ? true : false} placeholder={title} name="title" />
+          <InputAlt isEditing={isEditNote ? true : false} placeholder={title}   />
         ) : (
           <Title>{title || 'Título'}</Title>
         )}
