@@ -103,7 +103,7 @@ export default function CreateNote() {
     <NoteContainer>
       <form onSubmit={handleSubmit(onSubmit)}>
         <StyledFlexTitle>
-          <InputAlt name="title" control={control} placeholder="Título" />
+          <InputAlt name="title" control={control} placeholder="Título" required />
           {isFavorite ? (
             <Star onClick={() => setIsFavorite(!isFavorite)} src="estrelaYellow.png" />
           ) : (
@@ -111,7 +111,7 @@ export default function CreateNote() {
           )}
         </StyledFlexTitle>
         <Barra />
-        <Textarea name="text" control={control} placeholder="Criar nota.." />
+        <Textarea name="text" control={control} placeholder="Criar nota.." required />
         <ButtonContainer>
           <ButtonAlt type="submit">Criar nota</ButtonAlt>
         </ButtonContainer>

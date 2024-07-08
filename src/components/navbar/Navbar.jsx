@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 
 import Logo from '../logo/Logo'
@@ -33,30 +33,48 @@ const Search = styled.div`
 `
 const Image = styled.img`
   padding: 7px;
+  cursor: pointer;
 `
-const InputAlt = styled(Input)`
-  ::placeholder {
-    padding: 15px;
-  }
-`
+
 const StyledFlexSearchAndLogo = styled.div`
   width: 100%;
   display: flex;
   gap: 20px;
   align-items: center;
 `
-export default function Navbar() {
+const InputSearch = styled(Input)`
+  padding: 15px;
+`
+
+export default function Navbar({ onSearchChange, onCleanInput, ...props }) {
+  const [searchNote, setSearchNote] = useState('')
+
+  const handleSearchChange = (e) => {
+    setSearchNote(e.target.value)
+    if (typeof onSearchChange === 'function') {
+      onSearchChange(searchNote)
+    }
+  }
+  const cleanInput = () => {
+    if (typeof onCleanInput === 'function') {
+      onCleanInput(setSearchNote(''))
+    }
+  }
   return (
-    <Container>
+    <Container {...props}>
       <StyledFlexSearchAndLogo>
         <Logo />
         <Search>
-          <InputAlt placeholder="Pesquisar Notas" />
+          <InputSearch
+            value={searchNote}
+            onChange={handleSearchChange}
+            placeholder="Pesquisar Notas"
+            useControllerFlag={false}
+          />
           <Image src="lupa.png" />
         </Search>
       </StyledFlexSearchAndLogo>
-
-      <Image src="x.png" />
+      <Image onClick={cleanInput} src="x.png" />
     </Container>
   )
 }

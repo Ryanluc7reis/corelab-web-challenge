@@ -60,9 +60,10 @@ const fetcher = async (url) => {
   return response.data
 }
 
-export default function App() {
+export default function App({}) {
   const [loading, setLoading] = useState(true)
   const [showPopUp, setShowPopUp, messageType] = useContext(PopUpContext)
+  const [searchValue, setSearchValue] = useState('')
   const URI_API = process.env.API_URI
 
   const { data: dataFavoriteNotes, error: errorFavoriteNotes } = useSWR(
@@ -70,6 +71,14 @@ export default function App() {
     fetcher
   )
   const { data: dataNotes, error: errorNotes } = useSWR(`${URI_API}/getNotes`, fetcher)
+
+  const lowerSearch = searchValue ? searchValue.toLowerCase() : ''
+
+  const filterDataNotes =
+    dataNotes && dataNotes.filter((note) => note.title.toLowerCase().includes(lowerSearch))
+  const filterDataFavoritesNotes =
+    dataFavoriteNotes &&
+    dataFavoriteNotes.filter((note) => note.title.toLowerCase().includes(lowerSearch))
 
   useEffect(() => {
     setTimeout(() => {
@@ -100,13 +109,15 @@ export default function App() {
         </PopUpMessage>
       )}
 
-      <NavBar />
+      <NavBar onSearchChange={setSearchValue} onCleanInput={setSearchValue} />
       <Container>
         <CreateNote />
         <FavoriteList>
           <TitleList>Favoritos</TitleList>
-          {dataFavoriteNotes && errorFavoriteNotes === undefined && dataFavoriteNotes.length > 0 ? (
-            dataFavoriteNotes.map((note) => (
+          {filterDataFavoritesNotes &&
+          errorFavoriteNotes === undefined &&
+          filterDataFavoritesNotes.length > 0 ? (
+            filterDataFavoritesNotes.map((note) => (
               <Note
                 key={note._id}
                 title={note.title}
@@ -123,8 +134,8 @@ export default function App() {
         </FavoriteList>
         <NoteList>
           <TitleList>Outros</TitleList>
-          {dataNotes && errorNotes === undefined && dataNotes.length > 0 ? (
-            dataNotes.map((note) => (
+          {filterDataNotes && errorNotes === undefined && filterDataNotes.length > 0 ? (
+            filterDataNotes.map((note) => (
               <Note
                 key={note._id}
                 title={note.title}

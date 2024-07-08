@@ -43,6 +43,7 @@ const Text = styled.h3`
   text-align: left;
   width: 100%;
   padding: 15px;
+  cursor: default;
   color: rgba(79, 79, 77, 1);
 `
 const TextConfirmDelete = styled(Text)`
@@ -56,6 +57,7 @@ const Title = styled(Text)`
   font-size: 14.2px;
   font-weight: 700;
   text-align: left;
+  cursor: default;
   ::placeholder {
     color: rgba(51, 51, 51, 1);
   }

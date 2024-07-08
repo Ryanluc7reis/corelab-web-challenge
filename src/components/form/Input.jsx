@@ -13,9 +13,20 @@ const StyledInput = styled.input`
   }
 `
 
-export const Input = ({ placeholder, name, control, defaultValue = '', ...props }) => {
-   const {
-     field: { value, onChange }
-   } = useController({ name, control, defaultValue })
-  return <StyledInput {...props} placeholder={placeholder} value={value} onChange={onChange} />
+export const Input = ({
+  placeholder,
+  name,
+  control,
+  defaultValue = '',
+  useControllerFlag = true,
+  ...props
+}) => {
+  if (useControllerFlag) {
+    const {
+      field: { value, onChange }
+    } = useController({ name, control, defaultValue })
+    return <StyledInput {...props} placeholder={placeholder} value={value} onChange={onChange} />
+  } else {
+    return <StyledInput {...props} placeholder={placeholder} />
+  }
 }
