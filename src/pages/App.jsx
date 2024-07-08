@@ -53,7 +53,10 @@ const TitleList = styled.h2`
   }
 `
 
-const fetcher = (url) => fetch(url).then((res) => res.json());
+const fetcher = async (url) => {
+  const response = await axios.get(url)
+  return response.data
+}
 
 export default function App() {
   const URI_API = process.env.API_URI;

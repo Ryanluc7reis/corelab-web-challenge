@@ -1,12 +1,15 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
+import { useForm } from 'react-hook-form'
+import axios from 'axios'
+import { useSWRConfig } from 'swr'
 
 import { Input } from '../form/Input'
 import Textarea from '../form/Textarea'
 
 const NoteContainer = styled.div`
   width: 80%;
-  height: 130.36px;
+  height: 170.36px;
   border-radius: 25px;
   background: rgba(255, 255, 255, 1);
   border: 1px solid rgba(217, 217, 217, 1);
@@ -44,14 +47,73 @@ const Barra = styled.div`
   width: 100%;
   border: 1px solid rgba(217, 217, 217, 1);
 `
+const ButtonContainer = styled.div`
+display: flex;
+justify-content: end;
+height: 50%;
+align-items: end;
+
+@media (min-width: 600px){
+  align-items: start;
+  height: auto;
+}
+`
+const Button = styled.button`
+  padding: 7px;
+  width: 110px;
+  height: 35px;
+  background: rgba(69, 90, 100, 1);
+  color: white;
+  border: none;
+  border-radius: 7px;
+  margin: 0px 15px;
+  cursor: pointer;
+  :hover {
+    background: #3c474d;
+  }
+  @media (min-width: 600px){
+    margin: 0px 3px;
+}
+`
+
 export default function CreateNote() {
+  const {
+    control,
+    handleSubmit,
+    reset,
+  } = useForm({
+    mode: 'all'
+  })
   const [isFavorite, setIsFavorite] = useState(false)
+  const { mutate } = useSWRConfig()
+  const URI_API = process.env.API_URI;
+
+  const onSubmit = async (data) => {
+   
+    try {
+      let response;
+      if (isFavorite) {
+        response = await axios.post(`${URI_API}/createFavoriteNote`, data);
+      } else {
+        response = await axios.post(`${URI_API}/createNote`, data);
+      }
+  
+      if (response.status === 201) {
+        reset()
+        mutate(`${URI_API}/getNotes`)
+        mutate(`${URI_API}/getFavoritesNotes`)
+      }
+    } catch (err) {
+      console.error(err.message)
+     
+    }
+  }
 
   return (
     <NoteContainer>
-      <form>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <StyledFlexTitle>
-          <InputAlt placeholder="Título" />
+          <InputAlt name='title' control={control} placeholder="Título" />
           {isFavorite ? (
             <Star onClick={() => setIsFavorite(!isFavorite)} src="estrelaYellow.png" />
           ) : (
@@ -59,7 +121,11 @@ export default function CreateNote() {
           )}
         </StyledFlexTitle>
         <Barra />
-        <Textarea placeholder="Criar nota.." />
+        <Textarea name='text' control={control} placeholder="Criar nota.." />
+        <ButtonContainer >
+        <Button type='submit'>Criar nota</Button>
+        </ButtonContainer>
+
       </form>
     </NoteContainer>
   )
