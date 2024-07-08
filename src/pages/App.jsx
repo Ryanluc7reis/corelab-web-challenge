@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import axios from 'axios'
 import useSWR from 'swr'
@@ -59,25 +59,25 @@ const fetcher = async (url) => {
 }
 
 export default function App() {
-  const URI_API = process.env.API_URI;
-  const { data: dataFavoriteNotes, error: errorFavoriteNotes } = useSWR(`${URI_API}/getFavoritesNotes`, fetcher)
-  const { data: dataNotes, error: errorNotes } = useSWR(`${URI_API}/getNotes`, fetcher);
-  const [loading, setLoading] = useState(true);
+  const URI_API = process.env.API_URI
+  const { data: dataFavoriteNotes, error: errorFavoriteNotes } = useSWR(
+    `${URI_API}/getFavoritesNotes`,
+    fetcher
+  )
+  const { data: dataNotes, error: errorNotes } = useSWR(`${URI_API}/getNotes`, fetcher)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     if (dataFavoriteNotes) {
-      setLoading(false);
+      setLoading(false)
     }
     if (dataNotes) {
-      setLoading(false);
+      setLoading(false)
     }
-  }, [dataFavoriteNotes, errorFavoriteNotes, dataNotes, errorNotes]);
- 
-  if (loading)  return <h2>Carregando...</h2>;
-  if (errorFavoriteNotes && errorNotes && loading)  return <h2>Erro ao carregar dados</h2>;
-  
+  }, [dataFavoriteNotes, errorFavoriteNotes, dataNotes, errorNotes])
 
-  
+  if (loading) return <h2>Carregando...</h2>
+  if (errorFavoriteNotes && errorNotes && loading) return <h2>Erro ao carregar dados</h2>
 
   return (
     <>
@@ -86,7 +86,7 @@ export default function App() {
         <CreateNote />
         <FavoriteList>
           <TitleList>Favoritos</TitleList>
-          {dataFavoriteNotes && dataFavoriteNotes.length > 0 ? (
+          {dataFavoriteNotes && errorFavoriteNotes === undefined && dataFavoriteNotes.length > 0 ? (
             dataFavoriteNotes.map((note) => (
               <Note
                 key={note._id}
@@ -99,12 +99,12 @@ export default function App() {
               />
             ))
           ) : (
-            <h3>Tarefas favoritas não encontradas</h3>
+            <h3>Nenhuma tarefa encontrada</h3>
           )}
         </FavoriteList>
         <NoteList>
           <TitleList>Outros</TitleList>
-          {dataNotes && dataNotes.length > 0 ? (
+          {dataNotes && errorNotes === undefined && dataNotes.length > 0 ? (
             dataNotes.map((note) => (
               <Note
                 key={note._id}
@@ -117,10 +117,10 @@ export default function App() {
               />
             ))
           ) : (
-            <h3>Tarefas não encontradas</h3>
+            <h3>Nenhuma tarefa encontrada</h3>
           )}
         </NoteList>
       </Container>
     </>
-  );
+  )
 }
