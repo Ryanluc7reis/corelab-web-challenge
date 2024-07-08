@@ -127,7 +127,7 @@ const ButtonDeleter = styled(Button)`
   }
 `
 export default function Note({ title, text, favorite, createdDate, color, id, ...props }) {
-  const [isFavorite, setIsFavorite] = useState(false)
+  const [currentFavorite, setCurrentFavorite] = useState(false)
   const [isEditNote, setIsEditNote] = useState(false)
   const [isEditPaint, setIsEditPaint] = useState(false)
   const [currentColor, setCurrentColor] = useState(null)
@@ -142,9 +142,7 @@ export default function Note({ title, text, favorite, createdDate, color, id, ..
   const EditingPaint = () => {
     setIsEditPaint(!isEditPaint)
   }
-  const EditingFavorite = () => {
-    setIsFavorite(!isFavorite)
-  }
+
   const CloseBoxPaint = () => {
     if (currentColor !== null) {
       setIsEditPaint(false)
@@ -159,15 +157,46 @@ export default function Note({ title, text, favorite, createdDate, color, id, ..
   const handleDelete = async () => {
     try {
       const response = await axios.delete(`${URI_API}/deleteNote`, {
-        data: {
-          id
-        }
+        data: { id }
       })
 
       if (response.status === 200) {
         mutate(`${URI_API}/getNotes`)
         mutate(`${URI_API}/getFavoritesNotes`)
         setConfirmDelete(false)
+      }
+    } catch (err) {
+      console.error(err.message)
+    }
+  }
+  const handleEditFavorite = async () => {
+    setCurrentFavorite(!currentFavorite)
+    const newOther = currentFavorite
+    const newFavorite = !currentFavorite
+
+    try {
+      const response = await axios.get(`${URI_API}/getOneNote?id=${id}`)
+      const data = response.data
+      if (data.isFavorite === true) {
+        const responseEdit = await axios.patch(`${URI_API}/editFavoriteNote`, {
+          id,
+          isFavorite: newOther
+        })
+
+        if (responseEdit.status === 200) {
+          mutate(`${URI_API}/getFavoritesNotes`)
+          mutate(`${URI_API}/getNotes`)
+        }
+      } else {
+        const responseEdit = await axios.patch(`${URI_API}/editFavoriteNote`, {
+          id,
+          isFavorite: newFavorite
+        })
+
+        if (responseEdit.status === 200) {
+          mutate(`${URI_API}/getFavoritesNotes`)
+          mutate(`${URI_API}/getNotes`)
+        }
       }
     } catch (err) {
       console.error(err.message)
@@ -188,9 +217,9 @@ export default function Note({ title, text, favorite, createdDate, color, id, ..
           <Title>{title || 'Título'}</Title>
         )}
         {favorite ? (
-          <Image onClick={EditingFavorite} src="estrelaYellow.png" />
+          <Image onClick={handleEditFavorite} src="estrelaYellow.png" />
         ) : (
-          <Image onClick={EditingFavorite} src="estrela.png" />
+          <Image onClick={handleEditFavorite} src="estrela.png" />
         )}
       </div>
       <Barra />
