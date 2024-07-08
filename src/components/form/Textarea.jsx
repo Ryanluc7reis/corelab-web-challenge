@@ -1,9 +1,11 @@
 import React from 'react'
 import styled from 'styled-components'
+import { useController } from 'react-hook-form'
 
 const StyledTextarea = styled.textarea`
   resize: none;
   width: 100%;
+  height: 21%;
   padding: 15px;
   border-radius: 10px;
   font-family: sans-serif;
@@ -13,10 +15,14 @@ const StyledTextarea = styled.textarea`
   text-align: left;
   background: transparent;
   border: none;
+  overflow: hidden;
   :focus {
     outline: none;
   }
 `
-export default function Textarea({ placeholder, ...props }) {
-  return <StyledTextarea {...props} placeholder={placeholder} />
+export default function Textarea({ placeholder, name, control, defaultValue = '', ...props }) {
+  const {
+    field: { value, onChange }
+  } = useController({ name, control, defaultValue })
+  return <StyledTextarea {...props} placeholder={placeholder} value={value} onChange={onChange} />
 }
