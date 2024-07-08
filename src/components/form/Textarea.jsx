@@ -12,9 +12,9 @@ const StyledTextarea = styled.textarea`
   font-size: 13px;
   font-weight: 400;
   line-height: 15.73px;
-  text-align: left;
   background: transparent;
   border: none;
+  text-align: left;
   overflow: hidden;
   :focus {
     outline: none;

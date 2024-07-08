@@ -73,6 +73,8 @@ const InputTitle = styled(Input)`
   ::placeholder {
     color: rgba(51, 51, 51, 1);
   }
+  padding: 10px;
+  border-radius: 10px;
   border: ${(props) => (props.isEditing ? '1px solid black' : 'none')};
 `
 const Image = styled.img`
@@ -94,7 +96,10 @@ const Barra = styled.div`
   border: 1px solid rgba(217, 217, 217, 1);
 `
 const TextareaEditing = styled(Textarea)`
-  width: 100%;
+  width: 90%;
+  display: flex;
+  padding: 10px;
+  height: 100%;
   color: rgba(79, 79, 77, 1);
   border: ${(props) => (props.isEditing ? '1px solid black' : 'none')};
 `
@@ -130,6 +135,19 @@ const ButtonDeleter = styled(Button)`
     background: #790000;
   }
 `
+const ButtonEditingNote = styled(Button)`
+  width: 130px;
+`
+const Form = styled.form`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+`
+const FormTextarea = styled(Form)`
+  padding-top: 20px;
+`
 export default function Note({ title, text, favorite, createdDate, color, id, ...props }) {
   const [currentFavorite, setCurrentFavorite] = useState(false)
   const [isEditNote, setIsEditNote] = useState(false)
@@ -138,6 +156,9 @@ export default function Note({ title, text, favorite, createdDate, color, id, ..
 
   const URI_API = process.env.API_URI
   const { mutate } = useSWRConfig()
+  const { control, handleSubmit } = useForm({
+    mode: 'all'
+  })
 
   const EditingNote = () => {
     setIsEditNote(!isEditNote)
@@ -154,9 +175,7 @@ export default function Note({ title, text, favorite, createdDate, color, id, ..
     mutate(`${URI_API}/getNotes`)
     mutate(`${URI_API}/getFavoritesNotes`)
   }
-  const { control } = useForm({
-    mode: 'all'
-  })
+
   const handleDelete = async () => {
     try {
       const response = await axios.delete(`${URI_API}/deleteNote`, {
@@ -206,17 +225,36 @@ export default function Note({ title, text, favorite, createdDate, color, id, ..
       console.error(err.message)
     }
   }
+  const onSubmitNote = async (data) => {
+    try {
+      const response = await axios.patch(`${URI_API}/editNote`, {
+        id,
+        title: data.title,
+        text: data.text,
+        color
+      })
+      if (response.status === 200) {
+        setIsEditNote(false)
+        mutate(`${URI_API}/getFavoritesNotes`)
+        mutate(`${URI_API}/getNotes`)
+      }
+    } catch (err) {
+      console.error(err.message)
+    }
+  }
 
   return (
     <NoteContainer {...props} style={{ backgroundColor: String(color) }}>
       <EditingFlex>
         {isEditNote ? (
-          <InputTitle
-            name="title"
-            control="control"
-            isEditing={isEditNote ? true : false}
-            placeholder={title}
-          />
+          <Form onSubmit={handleSubmit(onSubmitNote)}>
+            <InputTitle
+              name="title"
+              control={control}
+              defaultValue={title}
+              isEditing={isEditNote ? true : false}
+            />
+          </Form>
         ) : (
           <Title>{title}</Title>
         )}
@@ -229,9 +267,17 @@ export default function Note({ title, text, favorite, createdDate, color, id, ..
       <Barra />
       <TextareaContainer>
         {isEditNote ? (
-          <TextareaEditing isEditing={isEditNote ? true : false} placeholder={text} />
+          <FormTextarea onSubmit={handleSubmit(onSubmitNote)}>
+            <TextareaEditing
+              name="text"
+              control={control}
+              defaultValue={text}
+              isEditing={isEditNote ? true : false}
+            />
+            <ButtonEditingNote type="submit">Salvar alterações</ButtonEditingNote>
+          </FormTextarea>
         ) : (
-          <Text>{text || 'Clique ou arraste o arquivo para esta área para fazer upload'}</Text>
+          <Text>{text}</Text>
         )}
         <EditingContainer>
           <EditingFlex>
