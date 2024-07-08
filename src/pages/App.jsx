@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import styled from 'styled-components'
 import axios from 'axios'
 import useSWR from 'swr'
+import { PopUpContext } from '../context/useContextPopUp'
 
 import CreateNote from '../components/notes/CreateNote'
 import NavBar from '../components/navbar/Navbar'
 import Note from '../components/notes/Note'
+import PopUpMessage from '../components/popupmessage/PopUpMessage'
 
 const Container = styled.div`
   width: 100%;
@@ -59,15 +61,21 @@ const fetcher = async (url) => {
 }
 
 export default function App() {
+  const [loading, setLoading] = useState(true)
+  const [showPopUp, setShowPopUp, messageType] = useContext(PopUpContext)
   const URI_API = process.env.API_URI
+
   const { data: dataFavoriteNotes, error: errorFavoriteNotes } = useSWR(
     `${URI_API}/getFavoritesNotes`,
     fetcher
   )
   const { data: dataNotes, error: errorNotes } = useSWR(`${URI_API}/getNotes`, fetcher)
-  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    setTimeout(() => {
+      setShowPopUp(false)
+    }, 2500)
+
     if (dataFavoriteNotes) {
       setLoading(false)
     }
@@ -81,6 +89,17 @@ export default function App() {
 
   return (
     <>
+      {showPopUp && (
+        <PopUpMessage error={messageType === 'error' ? true : false}>
+          {messageType === 'created' && 'Tarefa criada com sucesso'}
+          {messageType === 'deleted' && 'Tarefa deletada com sucesso'}
+          {messageType === 'edited' && 'Tarefa editada com sucesso'}
+          {messageType === 'addFavorites' && 'Tarefa adicionada aos favoritos'}
+          {messageType === 'addOthers' && 'Tarefa removida dos favoridos'}
+          {messageType === 'error' && 'Algo deu errado'}
+        </PopUpMessage>
+      )}
+
       <NavBar />
       <Container>
         <CreateNote />

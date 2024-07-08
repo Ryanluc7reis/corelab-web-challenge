@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import styled from 'styled-components'
 import { useForm } from 'react-hook-form'
 import axios from 'axios'
 import { useSWRConfig } from 'swr'
+import { PopUpContext } from '../../context/useContextPopUp'
 
 import { Input } from '../form/Input'
 import { Button } from '../form/Button'
@@ -153,6 +154,7 @@ export default function Note({ title, text, favorite, createdDate, color, id, ..
   const [isEditNote, setIsEditNote] = useState(false)
   const [isEditPaint, setIsEditPaint] = useState(false)
   const [confirmDelete, setConfirmDelete] = useState(false)
+  const [showPopUp, setShowPopUp, messageType, setMessageType] = useContext(PopUpContext)
 
   const URI_API = process.env.API_URI
   const { mutate } = useSWRConfig()
@@ -170,7 +172,7 @@ export default function Note({ title, text, favorite, createdDate, color, id, ..
   const HandleConfirmDelete = () => {
     setConfirmDelete(!confirmDelete)
   }
-  const handleSaveEdit = () => {
+  const handleSaveEditPaint = () => {
     setIsEditPaint(false)
     mutate(`${URI_API}/getNotes`)
     mutate(`${URI_API}/getFavoritesNotes`)
@@ -186,9 +188,12 @@ export default function Note({ title, text, favorite, createdDate, color, id, ..
         mutate(`${URI_API}/getNotes`)
         mutate(`${URI_API}/getFavoritesNotes`)
         setConfirmDelete(false)
+        setShowPopUp(true)
+        setMessageType('deleted')
       }
     } catch (err) {
       console.error(err.message)
+      setMessageType('error')
     }
   }
   const handleEditFavorite = async () => {
@@ -209,6 +214,8 @@ export default function Note({ title, text, favorite, createdDate, color, id, ..
         if (responseEdit.status === 200) {
           mutate(`${URI_API}/getFavoritesNotes`)
           mutate(`${URI_API}/getNotes`)
+          setShowPopUp(true)
+          setMessageType('addOthers')
         }
       } else {
         const responseEdit = await axios.patch(`${URI_API}/editFavoriteNote`, {
@@ -219,10 +226,13 @@ export default function Note({ title, text, favorite, createdDate, color, id, ..
         if (responseEdit.status === 200) {
           mutate(`${URI_API}/getFavoritesNotes`)
           mutate(`${URI_API}/getNotes`)
+          setShowPopUp(true)
+          setMessageType('addFavorites')
         }
       }
     } catch (err) {
       console.error(err.message)
+      setMessageType('error')
     }
   }
   const onSubmitNote = async (data) => {
@@ -237,9 +247,12 @@ export default function Note({ title, text, favorite, createdDate, color, id, ..
         setIsEditNote(false)
         mutate(`${URI_API}/getFavoritesNotes`)
         mutate(`${URI_API}/getNotes`)
+        setShowPopUp(true)
+        setMessageType('edited')
       }
     } catch (err) {
       console.error(err.message)
+      setMessageType('error')
     }
   }
 
@@ -307,7 +320,7 @@ export default function Note({ title, text, favorite, createdDate, color, id, ..
         </EditingContainer>
       </TextareaContainer>
       {isEditPaint && (
-        <EditPaint id={id} title={title} text={text} color={color} onSave={handleSaveEdit} />
+        <EditPaint id={id} title={title} text={text} color={color} onSave={handleSaveEditPaint} />
       )}
     </NoteContainer>
   )

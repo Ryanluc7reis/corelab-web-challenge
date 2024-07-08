@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import styled from 'styled-components'
 import { useForm } from 'react-hook-form'
 import axios from 'axios'
 import { useSWRConfig } from 'swr'
+import { PopUpContext } from '../../context/useContextPopUp'
 
 import { Input } from '../form/Input'
 import { Button } from '../form/Button'
@@ -67,12 +68,14 @@ const ButtonAlt = styled(Button)`
 `
 
 export default function CreateNote() {
+  const [isFavorite, setIsFavorite] = useState(false)
+  const [showPopUp, setShowPopUp, messageType, setMessageType] = useContext(PopUpContext)
+
+  const { mutate } = useSWRConfig()
+  const URI_API = process.env.API_URI
   const { control, handleSubmit, reset } = useForm({
     mode: 'all'
   })
-  const [isFavorite, setIsFavorite] = useState(false)
-  const { mutate } = useSWRConfig()
-  const URI_API = process.env.API_URI
 
   const onSubmit = async (data) => {
     try {
@@ -87,9 +90,12 @@ export default function CreateNote() {
         reset()
         mutate(`${URI_API}/getNotes`)
         mutate(`${URI_API}/getFavoritesNotes`)
+        setShowPopUp(true)
+        setMessageType('created')
       }
     } catch (err) {
       console.error(err.message)
+      setMessageType('error')
     }
   }
 

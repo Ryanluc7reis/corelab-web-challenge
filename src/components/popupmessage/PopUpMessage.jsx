@@ -16,7 +16,8 @@ const BoxMessageToRequest = styled.div`
   align-items: center;
   justify-content: center;
   gap: 7px;
-  position: absolute;
+  z-index: 1;
+  position: fixed;
   top: 2%;
   left: 6%;
   animation: ${(props) => props.request && slideDown} 0.3s forwards;

@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React, { useContext } from 'react'
 import styled from 'styled-components'
 import axios from 'axios'
+import { PopUpContext } from '../../context/useContextPopUp'
 
 const BoxPaint = styled.div`
   width: 267.94px;
@@ -39,6 +40,7 @@ const ColorPaint = styled.div`
 `
 
 export default function EditPaint({ id, title, text, color, onSave, ...props }) {
+  const [showPopUp, setShowPopUp, messageType, setMessageType] = useContext(PopUpContext)
   const URI_API = process.env.API_URI
 
   const handleEditPaint = async (isColor) => {
@@ -51,9 +53,12 @@ export default function EditPaint({ id, title, text, color, onSave, ...props }) 
       })
       if (response.status === 200) {
         onSave()
+        setShowPopUp(true)
+        setMessageType('edited')
       }
     } catch (err) {
       console.error(err.message)
+      setMessageType('error')
     }
   }
   return (
