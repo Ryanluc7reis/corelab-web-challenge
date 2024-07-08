@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
+import axios from 'axios'
 
 const BoxPaint = styled.div`
   width: 267.94px;
@@ -37,63 +38,72 @@ const ColorPaint = styled.div`
   cursor: pointer;
 `
 
-export default function EditPaint({ ...props }) {
-  const [color, setColor] = useState(null)
+export default function EditPaint({ id, title, text, color, onSave, ...props }) {
+  const URI_API = process.env.API_URI
 
-  const getColor = (isColor) => {
-    setColor(isColor)
-    props.setCurrentColor(isColor)
-    props.closeBoxPaint(isColor)
+  const handleEditPaint = async (isColor) => {
+    try {
+      const response = await axios.patch(`${URI_API}/editNote`, {
+        id,
+        title,
+        text,
+        color: isColor
+      })
+      if (response.status === 200) {
+        onSave()
+      }
+    } catch (err) {
+      console.error(err.message)
+    }
   }
-
   return (
-    <BoxPaint>
+    <BoxPaint {...props}>
       <ColorPaint
-        onClick={() => getColor('rgba(169, 154, 124, 1)')}
+        onClick={() => handleEditPaint('rgba(169, 154, 124, 1)')}
         style={{ background: 'rgba(169, 154, 124, 1)' }}
       />
       <ColorPaint
-        onClick={() => getColor('rgba(186, 226, 255, 1)')}
+        onClick={() => handleEditPaint('rgba(186, 226, 255, 1)')}
         style={{ background: 'rgba(186, 226, 255, 1)' }}
       />
       <ColorPaint
-        onClick={() => getColor('rgba(185, 255, 221, 1)')}
+        onClick={() => handleEditPaint('rgba(185, 255, 221, 1)')}
         style={{ background: 'rgba(185, 255, 221, 1)' }}
       />
       <ColorPaint
-        onClick={() => getColor('rgba(255, 232, 172, 1)')}
+        onClick={() => handleEditPaint('rgba(255, 232, 172, 1)')}
         style={{ background: 'rgba(255, 232, 172, 1)' }}
       />
       <ColorPaint
-        onClick={() => getColor('rgba(255, 202, 185, 1)')}
+        onClick={() => handleEditPaint('rgba(255, 202, 185, 1)')}
         style={{ background: 'rgba(255, 202, 185, 1)' }}
       />
       <ColorPaint
-        onClick={() => getColor('rgba(249, 148, 148, 1)')}
+        onClick={() => handleEditPaint('rgba(249, 148, 148, 1)')}
         style={{ background: 'rgba(249, 148, 148, 1)' }}
       />
       <ColorPaint
-        onClick={() => getColor('rgba(236, 161, 255, 1)')}
+        onClick={() => handleEditPaint('rgba(236, 161, 255, 1)')}
         style={{ background: 'rgba(236, 161, 255, 1)' }}
       />
       <ColorPaint
-        onClick={() => getColor('rgba(157, 214, 255, 1)')}
+        onClick={() => handleEditPaint('rgba(157, 214, 255, 1)')}
         style={{ background: 'rgba(157, 214, 255, 1)' }}
       />
       <ColorPaint
-        onClick={() => getColor('rgba(218, 255, 139, 1)')}
+        onClick={() => handleEditPaint('rgba(218, 255, 139, 1)')}
         style={{ background: 'rgba(218, 255, 139, 1)' }}
       />
       <ColorPaint
-        onClick={() => getColor('rgba(255, 162, 133, 1)')}
+        onClick={() => handleEditPaint('rgba(255, 162, 133, 1)')}
         style={{ background: 'rgba(255, 162, 133, 1)' }}
       />
       <ColorPaint
-        onClick={() => getColor('rgba(205, 205, 205, 1)')}
+        onClick={() => handleEditPaint('rgba(205, 205, 205, 1)')}
         style={{ background: 'rgba(205, 205, 205, 1)' }}
       />
       <ColorPaint
-        onClick={() => getColor('rgba(151, 151, 151, 1)')}
+        onClick={() => handleEditPaint('rgba(151, 151, 151, 1)')}
         style={{ background: 'rgba(151, 151, 151, 1)' }}
       />
     </BoxPaint>

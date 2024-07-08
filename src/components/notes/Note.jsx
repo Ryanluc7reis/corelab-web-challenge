@@ -14,7 +14,6 @@ const NoteContainer = styled.div`
   width: 80%;
   height: 337.59px;
   border-radius: 25px;
-  background: rgba(255, 255, 255, 1);
   box-shadow: 2px 2px 3px 0px rgba(0, 0, 0, 0.25);
   display: flex;
   flex-direction: column;
@@ -23,6 +22,11 @@ const NoteContainer = styled.div`
     width: 340px;
     height: 430px;
   }
+`
+const EditingFlex = styled.div`
+  display: flex;
+  align-items: center;
+  padding: 10px;
 `
 const TextareaContainer = styled.div`
   display: flex;
@@ -55,7 +59,7 @@ const Title = styled(Text)`
     color: rgba(51, 51, 51, 1);
   }
 `
-const StyledFlexEditing = styled.div`
+const EditingContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -79,7 +83,7 @@ const Image = styled.img`
     border-radius: 15px;
   }
 `
-const ImagePaint = styled(Image)`
+const ImagePincelAndPaint = styled(Image)`
   padding: 7px;
   border-radius: 15px;
   background: rgba(255, 227, 179, 1);
@@ -130,7 +134,6 @@ export default function Note({ title, text, favorite, createdDate, color, id, ..
   const [currentFavorite, setCurrentFavorite] = useState(false)
   const [isEditNote, setIsEditNote] = useState(false)
   const [isEditPaint, setIsEditPaint] = useState(false)
-  const [currentColor, setCurrentColor] = useState(null)
   const [confirmDelete, setConfirmDelete] = useState(false)
 
   const URI_API = process.env.API_URI
@@ -143,13 +146,13 @@ export default function Note({ title, text, favorite, createdDate, color, id, ..
     setIsEditPaint(!isEditPaint)
   }
 
-  const CloseBoxPaint = () => {
-    if (currentColor !== null) {
-      setIsEditPaint(false)
-    }
-  }
   const HandleConfirmDelete = () => {
     setConfirmDelete(!confirmDelete)
+  }
+  const handleSaveEdit = () => {
+    setIsEditPaint(false)
+    mutate(`${URI_API}/getNotes`)
+    mutate(`${URI_API}/getFavoritesNotes`)
   }
   const { control } = useForm({
     mode: 'all'
@@ -177,6 +180,7 @@ export default function Note({ title, text, favorite, createdDate, color, id, ..
     try {
       const response = await axios.get(`${URI_API}/getOneNote?id=${id}`)
       const data = response.data
+
       if (data.isFavorite === true) {
         const responseEdit = await axios.patch(`${URI_API}/editFavoriteNote`, {
           id,
@@ -204,8 +208,8 @@ export default function Note({ title, text, favorite, createdDate, color, id, ..
   }
 
   return (
-    <NoteContainer {...props} style={{ background: { color } }}>
-      <div style={{ display: 'flex', alignItems: 'center', padding: '10px' }}>
+    <NoteContainer {...props} style={{ backgroundColor: String(color) }}>
+      <EditingFlex>
         {isEditNote ? (
           <InputTitle
             name="title"
@@ -214,14 +218,14 @@ export default function Note({ title, text, favorite, createdDate, color, id, ..
             placeholder={title}
           />
         ) : (
-          <Title>{title || 'Título'}</Title>
+          <Title>{title}</Title>
         )}
         {favorite ? (
           <Image onClick={handleEditFavorite} src="estrelaYellow.png" />
         ) : (
           <Image onClick={handleEditFavorite} src="estrela.png" />
         )}
-      </div>
+      </EditingFlex>
       <Barra />
       <TextareaContainer>
         {isEditNote ? (
@@ -229,26 +233,24 @@ export default function Note({ title, text, favorite, createdDate, color, id, ..
         ) : (
           <Text>{text || 'Clique ou arraste o arquivo para esta área para fazer upload'}</Text>
         )}
-        <StyledFlexEditing>
-          <div style={{ display: 'flex', alignItems: 'center', padding: '10px' }}>
+        <EditingContainer>
+          <EditingFlex>
             {isEditNote ? (
-              <ImagePaint onClick={EditingNote} src="edit.png" />
+              <ImagePincelAndPaint onClick={EditingNote} src="edit.png" />
             ) : (
               <Image onClick={EditingNote} src="edit.png" />
             )}
             {isEditPaint ? (
-              <ImageAlt onClick={EditingPaint} src="poteTinta.png" />
+              <ImagePincelAndPaint onClick={EditingPaint} src="poteTinta.png" />
             ) : (
               <Image onClick={EditingPaint} src="poteTinta.png" />
             )}
-          </div>
+          </EditingFlex>
           <Image onClick={HandleConfirmDelete} src="x.png" />
           {confirmDelete && (
             <ConfirmDeleteContainer>
               <ConfirmDelete>
-                <TextConfirmDelete style={{ color: 'black' }}>
-                  Tem certeza que deseja excluir essa tarefa ?{' '}
-                </TextConfirmDelete>
+                <TextConfirmDelete>Tem certeza que deseja excluir essa tarefa ? </TextConfirmDelete>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
                   <Button onClick={HandleConfirmDelete}>Cancelar</Button>
                   <ButtonDeleter onClick={handleDelete}>Excluir </ButtonDeleter>
@@ -256,9 +258,11 @@ export default function Note({ title, text, favorite, createdDate, color, id, ..
               </ConfirmDelete>
             </ConfirmDeleteContainer>
           )}
-        </StyledFlexEditing>
+        </EditingContainer>
       </TextareaContainer>
-      {isEditPaint && <EditPaint setCurrentColor={setCurrentColor} closeBoxPaint={CloseBoxPaint} />}
+      {isEditPaint && (
+        <EditPaint id={id} title={title} text={text} color={color} onSave={handleSaveEdit} />
+      )}
     </NoteContainer>
   )
 }
