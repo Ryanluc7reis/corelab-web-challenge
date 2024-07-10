@@ -1,6 +1,6 @@
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const Dotenv = require('dotenv-webpack');
+const path = require('path')
+const Dotenv = require('dotenv-webpack')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
   entry: './src/index.jsx',
@@ -8,29 +8,14 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js'
   },
-  mode: 'development',
-  devServer: {
-    static: path.resolve(__dirname, 'public'),
-    port: 3000,
-    open: false,
-    hot: true,
-    liveReload: false,
-    setupExitSignals: true
-  },
   module: {
     rules: [
       {
-        test: /\.jsx?$/,
+        test: /\.(js|jsx)$/,
         exclude: /node_modules/,
-        use: 'babel-loader'
-      },
-      {
-        test: /\.css$/,
-        use: ['style-loader', 'css-loader']
-      },
-      {
-        test: /\.scss$/,
-        use: ['style-loader', 'css-loader']
+        use: {
+          loader: 'babel-loader'
+        }
       }
     ]
   },
@@ -38,12 +23,19 @@ module.exports = {
     extensions: ['.js', '.jsx']
   },
   plugins: [
+    new Dotenv({
+      path: path.resolve(__dirname, './.env')
+    }),
     new HtmlWebpackPlugin({
       template: './public/index.html'
-    }),
-    new Dotenv({
-      path: './.env',
-      safe: false,
     })
-  ]
-};
+  ],
+  devServer: {
+    static: {
+      directory: path.join(__dirname, 'public')
+    },
+    compress: true,
+    port: 3000,
+    hot: true
+  }
+}
