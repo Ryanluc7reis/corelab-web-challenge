@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import Logo from '../logo/Logo'
 import { Input } from '../form/Input'
 
-const Container = styled.div`
+const NavContainer = styled.div`
   width: 100%;
   height: 57px;
   background: rgba(255, 255, 255, 1);
@@ -14,7 +14,7 @@ const Container = styled.div`
   justify-content: space-between;
   padding: 0 6px;
 `
-const Search = styled.div`
+const SearchContainer = styled.div`
   padding: 0 2px;
   display: flex;
   justify-content: space-between;
@@ -31,7 +31,7 @@ const Search = styled.div`
     width: 40%;
   }
 `
-const Image = styled.img`
+const Img = styled.img`
   padding: 7px;
   cursor: pointer;
 `
@@ -61,20 +61,20 @@ export default function Navbar({ onSearchChange, onCleanInput, ...props }) {
     }
   }
   return (
-    <Container {...props}>
+    <NavContainer {...props}>
       <StyledFlexSearchAndLogo>
         <Logo />
-        <Search>
+        <SearchContainer>
           <InputSearch
             value={searchNote}
             onChange={handleSearchChange}
             placeholder="Pesquisar Notas"
             useControllerFlag={false}
           />
-          <Image src="lupa.png" />
-        </Search>
+          <Img src="lupa.png" />
+        </SearchContainer>
       </StyledFlexSearchAndLogo>
-      <Image onClick={cleanInput} src="x.png" />
-    </Container>
+      <Img onClick={cleanInput} src="x.png" />
+    </NavContainer>
   )
 }

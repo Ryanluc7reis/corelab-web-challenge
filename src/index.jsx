@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client'
 import { createGlobalStyle } from 'styled-components'
 import { PopUpProvider } from './context/useContextPopUp'
 import App from './pages/App'
+
 const GlobalStyles = createGlobalStyle`
 * { 
   box-sizing: border-box;
@@ -10,7 +11,6 @@ const GlobalStyles = createGlobalStyle`
   margin: 0;
 }
 `
-
 const container = document.getElementById('root')
 const root = createRoot(container)
 root.render(

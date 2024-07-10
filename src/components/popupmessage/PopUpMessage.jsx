@@ -1,7 +1,7 @@
 import React from 'react'
 import styled, { keyframes } from 'styled-components'
 
-const BoxMessageToRequest = styled.div`
+const BoxMessage = styled.div`
   width: 280px;
   height: 90px;
   box-shadow:
@@ -54,16 +54,16 @@ const slideDown = keyframes`
     opacity: 1;
   }
 `
-const Image = styled.img`
+const Img = styled.img`
   padding: 1px;
 `
 export default function PopUpMessage({ error, children, ...props }) {
   return (
     <>
-      <BoxMessageToRequest {...props} request>
+      <BoxMessage {...props} request>
         {children}
-        {error ? <Image src="error.png" /> : <Image src="/check.png" />}
-      </BoxMessageToRequest>
+        {error ? <Img src="error.png" /> : <Img src="/check.png" />}
+      </BoxMessage>
     </>
   )
 }

@@ -16,7 +16,7 @@ const getColor = (props) => {
   }
   return '#eeeeee'
 }
-const FileContainer = styled.div`
+const FileUploadContainer = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -46,12 +46,12 @@ const TextContainer = styled.div`
   color: #474747da;
   justify-content: space-between;
 `
-const Image = styled.img`
+const ImgX = styled.img`
   padding: 1px;
   cursor: pointer;
 `
 
-export const FileUpload = ({ id, file, children, onClick }) => {
+export const FileUpload = ({ id, file, children }) => {
   const [showPopUp, setShowPopUp, messageType, setMessageType] = useContext(PopUpContext)
   const [confirmDelete, setConfirmDelete] = useState(false)
 
@@ -90,6 +90,7 @@ export const FileUpload = ({ id, file, children, onClick }) => {
       }
     }
   })
+
   const handleDelete = async () => {
     try {
       const response = await axios.patch(`${URI_API}/files/editFileToDelete`, {
@@ -117,12 +118,12 @@ export const FileUpload = ({ id, file, children, onClick }) => {
     }
   }
   return (
-    <FileContainer>
+    <FileUploadContainer>
       {file ? (
         <>
           <TextContainer>
             <p>Clique para ver seu arquivo</p>
-            <Image onClick={handleConfirmDelete} src="x.png" />
+            <ImgX onClick={handleConfirmDelete} src="x.png" />
           </TextContainer>
           <BoxFile onClick={seeYourFile}>{children}</BoxFile>
         </>
@@ -139,6 +140,6 @@ export const FileUpload = ({ id, file, children, onClick }) => {
       {confirmDelete && (
         <ConfirmDelete isFile onClickDelete={handleDelete} onClickClose={handleConfirmDelete} />
       )}
-    </FileContainer>
+    </FileUploadContainer>
   )
 }

@@ -76,7 +76,7 @@ const InputTitle = styled(Input)`
   border-radius: 10px;
   border: ${(props) => (props.isEditing ? '1px solid black' : 'none')};
 `
-const Image = styled.img`
+const Img = styled.img`
   padding: 7px;
   cursor: pointer;
   :hover {
@@ -84,7 +84,7 @@ const Image = styled.img`
     border-radius: 15px;
   }
 `
-const ImagePincelAndPaint = styled(Image)`
+const ImgPincelAndPaint = styled(Img)`
   padding: 7px;
   border-radius: 15px;
   background: rgba(255, 227, 179, 1);
@@ -162,6 +162,7 @@ export default function Note({ title, text, favorite, createdDate, file, color, 
       setMessageType('error')
     }
   }
+
   const handleEditFavorite = async () => {
     setCurrentFavorite(!currentFavorite)
     const newOther = currentFavorite
@@ -201,6 +202,7 @@ export default function Note({ title, text, favorite, createdDate, file, color, 
       setMessageType('error')
     }
   }
+
   const onSubmitNote = async (data) => {
     try {
       const response = await axios.patch(`${URI_API}/editNote`, {
@@ -238,9 +240,9 @@ export default function Note({ title, text, favorite, createdDate, file, color, 
           <Title>{title}</Title>
         )}
         {favorite ? (
-          <Image onClick={handleEditFavorite} src="estrelaYellow.png" />
+          <Img onClick={handleEditFavorite} src="estrelaYellow.png" />
         ) : (
-          <Image onClick={handleEditFavorite} src="estrela.png" />
+          <Img onClick={handleEditFavorite} src="estrela.png" />
         )}
       </EditingFlex>
       <Barra />
@@ -264,17 +266,17 @@ export default function Note({ title, text, favorite, createdDate, file, color, 
         <EditingContainer>
           <EditingFlex>
             {isEditNote ? (
-              <ImagePincelAndPaint onClick={EditingNote} src="edit.png" />
+              <ImgPincelAndPaint onClick={EditingNote} src="edit.png" />
             ) : (
-              <Image onClick={EditingNote} src="edit.png" />
+              <Img onClick={EditingNote} src="edit.png" />
             )}
             {isEditPaint ? (
-              <ImagePincelAndPaint onClick={EditingPaint} src="poteTinta.png" />
+              <ImgPincelAndPaint onClick={EditingPaint} src="poteTinta.png" />
             ) : (
-              <Image onClick={EditingPaint} src="poteTinta.png" />
+              <Img onClick={EditingPaint} src="poteTinta.png" />
             )}
           </EditingFlex>
-          <Image onClick={handleConfirmDelete} src="x.png" />
+          <Img onClick={handleConfirmDelete} src="x.png" />
           {confirmDelete && (
             <ConfirmDelete onClickDelete={handleDelete} onClickClose={handleConfirmDelete} />
           )}

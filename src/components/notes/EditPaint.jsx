@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import axios from 'axios'
 import { PopUpContext } from '../../context/useContextPopUp'
 
-const BoxPaint = styled.div`
+const PaintContainer = styled.div`
   width: 267.94px;
   height: 96.58px;
   border-radius: 9px;
@@ -62,7 +62,7 @@ export default function EditPaint({ id, title, text, color, onSave, ...props }) 
     }
   }
   return (
-    <BoxPaint {...props}>
+    <PaintContainer {...props}>
       <ColorPaint
         onClick={() => handleEditPaint('rgba(169, 154, 124, 1)')}
         style={{ background: 'rgba(169, 154, 124, 1)' }}
@@ -111,6 +111,6 @@ export default function EditPaint({ id, title, text, color, onSave, ...props }) 
         onClick={() => handleEditPaint('rgba(151, 151, 151, 1)')}
         style={{ background: 'rgba(151, 151, 151, 1)' }}
       />
-    </BoxPaint>
+    </PaintContainer>
   )
 }

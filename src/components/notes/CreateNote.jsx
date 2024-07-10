@@ -9,7 +9,7 @@ import { Input } from '../form/Input'
 import { Button } from '../form/Button'
 import Textarea from '../form/Textarea'
 
-const NoteContainer = styled.div`
+const CreateContainer = styled.div`
   width: 80%;
   height: 170.36px;
   border-radius: 25px;
@@ -32,7 +32,7 @@ const StyledFlexTitle = styled.div`
   justify-content: space-between;
   padding: 10px;
 `
-const InputAlt = styled(Input)`
+const InputTitle = styled(Input)`
   font-size: 14.2px;
   font-weight: 700;
   text-align: left;
@@ -40,7 +40,7 @@ const InputAlt = styled(Input)`
     color: rgba(51, 51, 51, 1);
   }
 `
-const Star = styled.img`
+const ImgStar = styled.img`
   padding: 1px;
   cursor: pointer;
 `
@@ -60,7 +60,7 @@ const ButtonContainer = styled.div`
     height: auto;
   }
 `
-const ButtonAlt = styled(Button)`
+const ButtonCreate = styled(Button)`
   margin: 0px 15px;
   @media (min-width: 600px) {
     margin: 0px 3px;
@@ -71,8 +71,8 @@ export default function CreateNote() {
   const [isFavorite, setIsFavorite] = useState(false)
   const [showPopUp, setShowPopUp, messageType, setMessageType] = useContext(PopUpContext)
 
-  const { mutate } = useSWRConfig()
   const URI_API = process.env.API_URI
+  const { mutate } = useSWRConfig()
   const { control, handleSubmit, reset } = useForm({
     mode: 'all'
   })
@@ -100,22 +100,22 @@ export default function CreateNote() {
   }
 
   return (
-    <NoteContainer>
+    <CreateContainer>
       <form onSubmit={handleSubmit(onSubmit)}>
         <StyledFlexTitle>
-          <InputAlt name="title" control={control} placeholder="Título" required />
+          <InputTitle name="title" control={control} placeholder="Título" required />
           {isFavorite ? (
-            <Star onClick={() => setIsFavorite(!isFavorite)} src="estrelaYellow.png" />
+            <ImgStar onClick={() => setIsFavorite(!isFavorite)} src="estrelaYellow.png" />
           ) : (
-            <Star onClick={() => setIsFavorite(!isFavorite)} src="estrela.png" />
+            <ImgStar onClick={() => setIsFavorite(!isFavorite)} src="estrela.png" />
           )}
         </StyledFlexTitle>
         <Barra />
         <Textarea name="text" control={control} placeholder="Criar nota.." required />
         <ButtonContainer>
-          <ButtonAlt type="submit">Criar nota</ButtonAlt>
+          <ButtonCreate type="submit">Criar nota</ButtonCreate>
         </ButtonContainer>
       </form>
-    </NoteContainer>
+    </CreateContainer>
   )
 }
