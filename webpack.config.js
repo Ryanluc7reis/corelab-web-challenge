@@ -1,12 +1,15 @@
 const path = require('path')
 const Dotenv = require('dotenv-webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const TerserPlugin = require('terser-webpack-plugin')
+const CompressionPlugin = require('compression-webpack-plugin')
 
 module.exports = {
   entry: './src/index.jsx',
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle.js'
+    filename: '[bundle.js].[contenthash].js',
+    chunkFilename: '[bundle.js].[contenthash].js'
   },
   module: {
     rules: [
@@ -28,8 +31,23 @@ module.exports = {
     }),
     new HtmlWebpackPlugin({
       template: './public/index.html'
+    }),
+    new CompressionPlugin({
+      algorithm: 'gzip'
     })
   ],
+  optimization: {
+    splitChunks: {
+      chunks: 'all',
+      name: false
+    },
+    minimize: true,
+    minimizer: [new TerserPlugin()]
+  },
+  performance: {
+    maxAssetSize: 300000,
+    maxEntrypointSize: 300000
+  },
   devServer: {
     static: {
       directory: path.join(__dirname, 'public')

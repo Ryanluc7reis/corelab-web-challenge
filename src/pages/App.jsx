@@ -54,7 +54,15 @@ const TitleList = styled.h2`
     left: 23%;
   }
 `
-
+const ScreenLoading = styled.div`
+  width: 100vw;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #e4e4e4;
+  font-size: 24px;
+`
 const fetcher = async (url) => {
   const response = await axios.get(url)
   return response.data
@@ -96,14 +104,14 @@ export default function App() {
     }
   }, [dataFavoriteNotes, errorFavoriteNotes, dataNotes, errorNotes])
 
-  if (loading) return <h2>Carregando...</h2>
+  if (loading) return <ScreenLoading>Carregando...</ScreenLoading>
 
   return (
     <>
       {showPopUp && (
         <PopUpMessage error={messageType === 'error' ? true : false}>
           {messageType === 'created' && 'Tarefa criada com sucesso'}
-          {messageType === 'createdFile' && 'Arquivo criado com sucesso'}
+          {messageType === 'createdFile' && 'Arquivo baixado com sucesso'}
           {messageType === 'deleted' && 'Tarefa deletada com sucesso'}
           {messageType === 'deletedFile' && 'Arquivo deletado com sucesso'}
           {messageType === 'edited' && 'Tarefa editada com sucesso'}
