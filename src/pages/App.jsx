@@ -60,7 +60,7 @@ const fetcher = async (url) => {
   return response.data
 }
 
-export default function App({}) {
+export default function App() {
   const [loading, setLoading] = useState(true)
   const [showPopUp, setShowPopUp, messageType] = useContext(PopUpContext)
   const [searchValue, setSearchValue] = useState('')
@@ -91,17 +91,21 @@ export default function App({}) {
     if (dataNotes) {
       setLoading(false)
     }
+    if (errorFavoriteNotes && errorNotes) {
+      setLoading(false)
+    }
   }, [dataFavoriteNotes, errorFavoriteNotes, dataNotes, errorNotes])
 
   if (loading) return <h2>Carregando...</h2>
-  if (errorFavoriteNotes && errorNotes && loading) return <h2>Erro ao carregar dados</h2>
 
   return (
     <>
       {showPopUp && (
         <PopUpMessage error={messageType === 'error' ? true : false}>
           {messageType === 'created' && 'Tarefa criada com sucesso'}
+          {messageType === 'createdFile' && 'Arquivo criado com sucesso'}
           {messageType === 'deleted' && 'Tarefa deletada com sucesso'}
+          {messageType === 'deletedFile' && 'Arquivo deletado com sucesso'}
           {messageType === 'edited' && 'Tarefa editada com sucesso'}
           {messageType === 'addFavorites' && 'Tarefa adicionada aos favoritos'}
           {messageType === 'addOthers' && 'Tarefa removida dos favoridos'}
@@ -125,6 +129,7 @@ export default function App({}) {
                 text={note.text}
                 favorite={note.isFavorite}
                 color={note.color}
+                file={note.src}
                 id={note._id}
               />
             ))
@@ -143,6 +148,7 @@ export default function App({}) {
                 text={note.text}
                 favorite={note.isFavorite}
                 color={note.color}
+                file={note.src}
                 id={note._id}
               />
             ))

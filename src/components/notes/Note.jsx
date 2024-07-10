@@ -9,6 +9,8 @@ import { Input } from '../form/Input'
 import { Button } from '../form/Button'
 import Textarea from '../form/Textarea'
 import EditPaint from './EditPaint'
+import { FileUpload } from '../fileupload/FileUpload'
+import ConfirmDelete from '../cofirmdelete/ConfirmDelete'
 
 const NoteContainer = styled.div`
   position: relative;
@@ -42,17 +44,11 @@ const Text = styled.h3`
   line-height: 15.73px;
   text-align: left;
   width: 100%;
-  padding: 15px;
+  padding: 15px 9px;
   cursor: default;
   color: rgba(79, 79, 77, 1);
 `
-const TextConfirmDelete = styled(Text)`
-  text-align: center;
-  font-weight: 600;
-  width: 90%;
-  font-size: 16px;
-  color: rgba(79, 79, 77, 1);
-`
+
 const Title = styled(Text)`
   font-size: 14.2px;
   font-weight: 700;
@@ -106,38 +102,6 @@ const TextareaEditing = styled(Textarea)`
   color: rgba(79, 79, 77, 1);
   border: ${(props) => (props.isEditing ? '1px solid black' : 'none')};
 `
-const ConfirmDeleteContainer = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  min-height: 100vh;
-  background-color: #0000006e;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1;
-`
-const ConfirmDelete = styled.div`
-  width: 80%;
-  height: 110px;
-  border-radius: 15px;
-  background-color: #fafafa;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-
-  @media (min-width: 600px) {
-    width: 440px;
-  }
-`
-const ButtonDeleter = styled(Button)`
-  background: red;
-  :hover {
-    background: #790000;
-  }
-`
 const ButtonEditingNote = styled(Button)`
   width: 130px;
 `
@@ -151,7 +115,7 @@ const Form = styled.form`
 const FormTextarea = styled(Form)`
   padding-top: 20px;
 `
-export default function Note({ title, text, favorite, createdDate, color, id, ...props }) {
+export default function Note({ title, text, favorite, createdDate, file, color, id, ...props }) {
   const [currentFavorite, setCurrentFavorite] = useState(false)
   const [isEditNote, setIsEditNote] = useState(false)
   const [isEditPaint, setIsEditPaint] = useState(false)
@@ -171,7 +135,7 @@ export default function Note({ title, text, favorite, createdDate, color, id, ..
     setIsEditPaint(!isEditPaint)
   }
 
-  const HandleConfirmDelete = () => {
+  const handleConfirmDelete = () => {
     setConfirmDelete(!confirmDelete)
   }
   const handleSaveEditPaint = () => {
@@ -294,6 +258,9 @@ export default function Note({ title, text, favorite, createdDate, color, id, ..
         ) : (
           <Text>{text}</Text>
         )}
+        <FileUpload onClick={id} file={file} id={id}>
+          {file}
+        </FileUpload>
         <EditingContainer>
           <EditingFlex>
             {isEditNote ? (
@@ -307,17 +274,9 @@ export default function Note({ title, text, favorite, createdDate, color, id, ..
               <Image onClick={EditingPaint} src="poteTinta.png" />
             )}
           </EditingFlex>
-          <Image onClick={HandleConfirmDelete} src="x.png" />
+          <Image onClick={handleConfirmDelete} src="x.png" />
           {confirmDelete && (
-            <ConfirmDeleteContainer>
-              <ConfirmDelete>
-                <TextConfirmDelete>Tem certeza que deseja excluir essa tarefa ? </TextConfirmDelete>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-                  <Button onClick={HandleConfirmDelete}>Cancelar</Button>
-                  <ButtonDeleter onClick={handleDelete}>Excluir </ButtonDeleter>
-                </div>
-              </ConfirmDelete>
-            </ConfirmDeleteContainer>
+            <ConfirmDelete onClickDelete={handleDelete} onClickClose={handleConfirmDelete} />
           )}
         </EditingContainer>
       </TextareaContainer>
