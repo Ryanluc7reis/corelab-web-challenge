@@ -75,7 +75,7 @@ export default function App() {
   const URI_API = process.env.API_URI
 
   const { data: dataFavoriteNotes, error: errorFavoriteNotes } = useSWR(
-    `${URI_API}/getFavoritesNotes`,
+    `https://corelab-api-challenge-ryanlucas.vercel.app/getFavoritesNotes`,
     fetcher
   )
   const { data: dataNotes, error: errorNotes } = useSWR(`${URI_API}/getNotes`, fetcher)
