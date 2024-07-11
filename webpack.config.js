@@ -3,13 +3,14 @@ const Dotenv = require('dotenv-webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
 const CompressionPlugin = require('compression-webpack-plugin')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 module.exports = {
   entry: './src/index.jsx',
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: '[bundle.js].[contenthash].js',
-    chunkFilename: '[bundle.js].[contenthash].js'
+    filename: '[name].[contenthash].js',
+    chunkFilename: '[name].[contenthash].js'
   },
   module: {
     rules: [
@@ -19,6 +20,18 @@ module.exports = {
         use: {
           loader: 'babel-loader'
         }
+      },
+      {
+        test: /\.(png|jpe?g|gif|svg)$/i,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: '[path][name].[hash].[ext]',
+              context: 'public'
+            }
+          }
+        ]
       }
     ]
   },
@@ -34,6 +47,9 @@ module.exports = {
     }),
     new CompressionPlugin({
       algorithm: 'gzip'
+    }),
+    new CopyWebpackPlugin({
+      patterns: [{ from: 'public', to: '', globOptions: { ignore: ['**/index.html'] } }]
     })
   ],
   optimization: {
