@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import axios from 'axios'
 import { useSWRConfig } from 'swr'
 
-import ConfirmDelete from '../cofirmdelete/ConfirmDelete'
+import ConfirmDelete from '../confirmdelete/ConfirmDelete'
 import { PopUpContext } from '../../context/useContextPopUp'
 
 const getColor = (props) => {

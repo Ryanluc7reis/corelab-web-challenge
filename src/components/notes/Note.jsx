@@ -10,7 +10,7 @@ import { Button } from '../form/Button'
 import Textarea from '../form/Textarea'
 import EditPaint from './EditPaint'
 import { FileUpload } from '../fileupload/FileUpload'
-import ConfirmDelete from '../cofirmdelete/ConfirmDelete'
+import ConfirmDelete from '../confirmdelete/ConfirmDelete'
 
 const NoteContainer = styled.div`
   position: relative;
