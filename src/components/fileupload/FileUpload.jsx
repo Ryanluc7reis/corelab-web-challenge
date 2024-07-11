@@ -54,6 +54,7 @@ const ImgX = styled.img`
 export const FileUpload = ({ id, file, children }) => {
   const [showPopUp, setShowPopUp, messageType, setMessageType] = useContext(PopUpContext)
   const [confirmDelete, setConfirmDelete] = useState(false)
+  const portCurrent = process.env.PORT
 
   const { mutate } = useSWRConfig()
 
@@ -72,15 +73,11 @@ export const FileUpload = ({ id, file, children }) => {
       })
 
       try {
-        const response = await axios.patch(
-          `https://corelab-api-challenge-ryanlucas.vercel.app/files/editFile`,
-          formData,
-          {
-            headers: {
-              'Content-Type': 'multipart/form-data'
-            }
+        const response = await axios.patch(`${portCurrent}/files/editFile`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
           }
-        )
+        })
         if (response.status === 200) {
           mutate(`https://corelab-api-challenge-ryanlucas.vercel.app/getNotes`)
           mutate(`https://corelab-api-challenge-ryanlucas.vercel.app/getFavoritesNotes`)
@@ -96,13 +93,10 @@ export const FileUpload = ({ id, file, children }) => {
 
   const handleDelete = async () => {
     try {
-      const response = await axios.patch(
-        `https://corelab-api-challenge-ryanlucas.vercel.app/files/editFileToDelete`,
-        {
-          id,
-          src: ''
-        }
-      )
+      const response = await axios.patch(`${portCurrent}/files/editFileToDelete`, {
+        id,
+        src: ''
+      })
 
       if (response.status === 200) {
         mutate(`https://corelab-api-challenge-ryanlucas.vercel.app/getNotes`)
@@ -120,7 +114,7 @@ export const FileUpload = ({ id, file, children }) => {
   const seeYourFile = () => {
     const fileName = file.split('\\').pop()
     if (file) {
-      window.open(`https://corelab-api-challenge-ryanlucas.vercel.app/seeFile/${fileName}`)
+      window.open(`${portCurrent}/seeFile/${fileName}`)
     }
   }
   return (
