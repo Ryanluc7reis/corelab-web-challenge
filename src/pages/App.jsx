@@ -83,11 +83,14 @@ export default function App() {
   const lowerSearch = searchValue ? searchValue.toLowerCase() : ''
 
   const filterDataNotes =
-    dataNotes && dataNotes.filter((note) => note.title.toLowerCase().includes(lowerSearch))
-  const filterDataFavoritesNotes =
-    dataFavoriteNotes &&
-    dataFavoriteNotes.filter((note) => note.title.toLowerCase().includes(lowerSearch))
+    dataNotes && Array.isArray(dataNotes)
+      ? dataNotes.filter((note) => note.title.toLowerCase().includes(lowerSearch))
+      : []
 
+  const filterDataFavoritesNotes =
+    dataFavoriteNotes && Array.isArray(dataFavoriteNotes)
+      ? dataFavoriteNotes.filter((note) => note.title.toLowerCase().includes(lowerSearch))
+      : []
   useEffect(() => {
     setTimeout(() => {
       setShowPopUp(false)
