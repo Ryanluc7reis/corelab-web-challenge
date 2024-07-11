@@ -41,16 +41,18 @@ const ColorPaint = styled.div`
 
 export default function EditPaint({ id, title, text, color, onSave, ...props }) {
   const [showPopUp, setShowPopUp, messageType, setMessageType] = useContext(PopUpContext)
-  const URI_API = process.env.API_URI
 
   const handleEditPaint = async (isColor) => {
     try {
-      const response = await axios.patch(`${URI_API}/editNote`, {
-        id,
-        title,
-        text,
-        color: isColor
-      })
+      const response = await axios.patch(
+        `https://corelab-api-challenge-ryanlucas.vercel.app/editNote`,
+        {
+          id,
+          title,
+          text,
+          color: isColor
+        }
+      )
       if (response.status === 200) {
         onSave()
         setShowPopUp(true)

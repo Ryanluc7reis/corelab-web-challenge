@@ -71,7 +71,6 @@ export default function CreateNote() {
   const [isFavorite, setIsFavorite] = useState(false)
   const [showPopUp, setShowPopUp, messageType, setMessageType] = useContext(PopUpContext)
 
-  const URI_API = process.env.API_URI
   const { mutate } = useSWRConfig()
   const { control, handleSubmit, reset } = useForm({
     mode: 'all'
@@ -81,15 +80,21 @@ export default function CreateNote() {
     try {
       let response
       if (isFavorite) {
-        response = await axios.post(`${URI_API}/createFavoriteNote`, data)
+        response = await axios.post(
+          `https://corelab-api-challenge-ryanlucas.vercel.app/createFavoriteNote`,
+          data
+        )
       } else {
-        response = await axios.post(`${URI_API}/createNote`, data)
+        response = await axios.post(
+          `https://corelab-api-challenge-ryanlucas.vercel.app/createNote`,
+          data
+        )
       }
 
       if (response.status === 201) {
         reset()
-        mutate(`${URI_API}/getNotes`)
-        mutate(`${URI_API}/getFavoritesNotes`)
+        mutate(`https://corelab-api-challenge-ryanlucas.vercel.app/getNotes`)
+        mutate(`https://corelab-api-challenge-ryanlucas.vercel.app/getFavoritesNotes`)
         setShowPopUp(true)
         setMessageType('created')
       }
