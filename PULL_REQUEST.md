@@ -4,7 +4,7 @@
 
 Essa aplicação foi contruída com ReactJs e Styled-components. A aplicação te oferece um gerenciador de tarefas com a possibilidade de marcar como favorito e anexar arquivos direto de sua máquina a favor de um layout simples, objetivo e responsivo.
 
-VÍDEO EXPLICANDO A APLICAÇÃO --> [https://github.com/Ryanluc7reis/corelab-web-challenge](https://github.com/Ryanluc7reis/corelab-web-challenge)
+VÍDEO EXPLICANDO A APLICAÇÃO --> [https://youtu.be/Qy1c8LcXMKw](https://youtu.be/Qy1c8LcXMKw)
 
 ## Deploy & Repositórios
 
