@@ -122,7 +122,6 @@ export default function Note({ title, text, favorite, createdDate, file, color, 
   const [confirmDelete, setConfirmDelete] = useState(false)
   const [showPopUp, setShowPopUp, messageType, setMessageType] = useContext(PopUpContext)
 
-  const URI_API = process.env.API_URI
   const { mutate } = useSWRConfig()
   const { control, handleSubmit } = useForm({
     mode: 'all'
@@ -140,19 +139,22 @@ export default function Note({ title, text, favorite, createdDate, file, color, 
   }
   const handleSaveEditPaint = () => {
     setIsEditPaint(false)
-    mutate(`${URI_API}/getNotes`)
-    mutate(`${URI_API}/getFavoritesNotes`)
+    mutate(`https://corelab-api-challenge-ryanlucas.vercel.app/getNotes`)
+    mutate(`https://corelab-api-challenge-ryanlucas.vercel.app/getFavoritesNotes`)
   }
 
   const handleDelete = async () => {
     try {
-      const response = await axios.delete(`${URI_API}/deleteNote`, {
-        data: { id }
-      })
+      const response = await axios.delete(
+        `https://corelab-api-challenge-ryanlucas.vercel.app/deleteNote`,
+        {
+          data: { id }
+        }
+      )
 
       if (response.status === 200) {
-        mutate(`${URI_API}/getNotes`)
-        mutate(`${URI_API}/getFavoritesNotes`)
+        mutate(`https://corelab-api-challenge-ryanlucas.vercel.app/getNotes`)
+        mutate(`https://corelab-api-challenge-ryanlucas.vercel.app/getFavoritesNotes`)
         setConfirmDelete(false)
         setShowPopUp(true)
         setMessageType('deleted')
@@ -169,30 +171,38 @@ export default function Note({ title, text, favorite, createdDate, file, color, 
     const newFavorite = !currentFavorite
 
     try {
-      const response = await axios.get(`${URI_API}/getOneNote?id=${id}`)
+      const response = await axios.get(
+        `https://corelab-api-challenge-ryanlucas.vercel.app/getOneNote?id=${id}`
+      )
       const data = response.data
 
       if (data.isFavorite === true) {
-        const responseEdit = await axios.patch(`${URI_API}/editFavoriteNote`, {
-          id,
-          isFavorite: newOther
-        })
+        const responseEdit = await axios.patch(
+          `https://corelab-api-challenge-ryanlucas.vercel.app/editFavoriteNote`,
+          {
+            id,
+            isFavorite: newOther
+          }
+        )
 
         if (responseEdit.status === 200) {
-          mutate(`${URI_API}/getFavoritesNotes`)
-          mutate(`${URI_API}/getNotes`)
+          mutate(`https://corelab-api-challenge-ryanlucas.vercel.app/getFavoritesNotes`)
+          mutate(`https://corelab-api-challenge-ryanlucas.vercel.app/getNotes`)
           setShowPopUp(true)
           setMessageType('addOthers')
         }
       } else {
-        const responseEdit = await axios.patch(`${URI_API}/editFavoriteNote`, {
-          id,
-          isFavorite: newFavorite
-        })
+        const responseEdit = await axios.patch(
+          `https://corelab-api-challenge-ryanlucas.vercel.app/editFavoriteNote`,
+          {
+            id,
+            isFavorite: newFavorite
+          }
+        )
 
         if (responseEdit.status === 200) {
-          mutate(`${URI_API}/getFavoritesNotes`)
-          mutate(`${URI_API}/getNotes`)
+          mutate(`https://corelab-api-challenge-ryanlucas.vercel.app/getFavoritesNotes`)
+          mutate(`https://corelab-api-challenge-ryanlucas.vercel.app/getNotes`)
           setShowPopUp(true)
           setMessageType('addFavorites')
         }
@@ -205,16 +215,19 @@ export default function Note({ title, text, favorite, createdDate, file, color, 
 
   const onSubmitNote = async (data) => {
     try {
-      const response = await axios.patch(`${URI_API}/editNote`, {
-        id,
-        title: data.title,
-        text: data.text,
-        color
-      })
+      const response = await axios.patch(
+        `https://corelab-api-challenge-ryanlucas.vercel.app/editNote`,
+        {
+          id,
+          title: data.title,
+          text: data.text,
+          color
+        }
+      )
       if (response.status === 200) {
         setIsEditNote(false)
-        mutate(`${URI_API}/getFavoritesNotes`)
-        mutate(`${URI_API}/getNotes`)
+        mutate(`https://corelab-api-challenge-ryanlucas.vercel.app/getFavoritesNotes`)
+        mutate(`https://corelab-api-challenge-ryanlucas.vercel.app/getNotes`)
         setShowPopUp(true)
         setMessageType('edited')
       }

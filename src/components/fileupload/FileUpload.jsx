@@ -55,7 +55,6 @@ export const FileUpload = ({ id, file, children }) => {
   const [showPopUp, setShowPopUp, messageType, setMessageType] = useContext(PopUpContext)
   const [confirmDelete, setConfirmDelete] = useState(false)
 
-  const URI_API = process.env.API_URI
   const { mutate } = useSWRConfig()
 
   const handleConfirmDelete = () => {
@@ -73,14 +72,18 @@ export const FileUpload = ({ id, file, children }) => {
       })
 
       try {
-        const response = await axios.patch(`${URI_API}/files/editFile`, formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data'
+        const response = await axios.patch(
+          `https://corelab-api-challenge-ryanlucas.vercel.app/files/editFile`,
+          formData,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
           }
-        })
+        )
         if (response.status === 200) {
-          mutate(`${URI_API}/getNotes`)
-          mutate(`${URI_API}/getFavoritesNotes`)
+          mutate(`https://corelab-api-challenge-ryanlucas.vercel.app/getNotes`)
+          mutate(`https://corelab-api-challenge-ryanlucas.vercel.app/getFavoritesNotes`)
           setShowPopUp(true)
           setMessageType('createdFile')
         }
@@ -93,14 +96,17 @@ export const FileUpload = ({ id, file, children }) => {
 
   const handleDelete = async () => {
     try {
-      const response = await axios.patch(`${URI_API}/files/editFileToDelete`, {
-        id,
-        src: ''
-      })
+      const response = await axios.patch(
+        `https://corelab-api-challenge-ryanlucas.vercel.app/files/editFileToDelete`,
+        {
+          id,
+          src: ''
+        }
+      )
 
       if (response.status === 200) {
-        mutate(`${URI_API}/getNotes`)
-        mutate(`${URI_API}/getFavoritesNotes`)
+        mutate(`https://corelab-api-challenge-ryanlucas.vercel.app/getNotes`)
+        mutate(`https://corelab-api-challenge-ryanlucas.vercel.app/getFavoritesNotes`)
         setConfirmDelete(false)
         setShowPopUp(true)
         setMessageType('deletedFile')
@@ -114,7 +120,7 @@ export const FileUpload = ({ id, file, children }) => {
   const seeYourFile = () => {
     const fileName = file.split('\\').pop()
     if (file) {
-      window.open(`${URI_API}/seeFile/${fileName}`)
+      window.open(`https://corelab-api-challenge-ryanlucas.vercel.app/seeFile/${fileName}`)
     }
   }
   return (
