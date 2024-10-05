@@ -25,7 +25,7 @@ export default function Navbar() {
   return (
     <LogoConatainer>
       <ImgLogo src="logo.png" />
-      <Text>CoreNotes</Text>
+      <Text>GambNotes</Text>
     </LogoConatainer>
   )
 }
