@@ -80,7 +80,7 @@ Seguindo conceitos e boas práticas de uma aplicação **React**, a aplicação 
 - Eslint / Prettier
 - Axios
 - SWR
-- Mobile first
+- Adapted for mobile 
 
 ## Getting Started
 
