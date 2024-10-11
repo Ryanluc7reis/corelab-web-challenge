@@ -14,7 +14,7 @@ Essa aplicação foi contruída com ReactJs e Styled-components. A aplicação t
 
   #### **[O projeto em produção não disponibiliza a funcionabilidade de anexar arquivos!!!]**
   
-## Layout
+## Layouts
 ![notes](https://github.com/user-attachments/assets/29cbc36f-a863-448b-b1bb-de93f4599829)
 ![editing color](https://github.com/user-attachments/assets/a52791a0-8772-45d2-b88e-df1c0025ab57)
 ![editing notes](https://github.com/user-attachments/assets/a01df22c-3186-465b-b5af-d6ccb5e682fe)
