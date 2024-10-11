@@ -1,4 +1,4 @@
-# CoreNotes - Frontend
+# GambNotes - Frontend
 
 ## Sobre a aplicação
 
@@ -15,6 +15,12 @@ Essa aplicação foi contruída com ReactJs e Styled-components. A aplicação t
 - Link do projeto em produção --> [CoreNotes projeto](https://corelab-web-challenge-ryanlucas.vercel.app/)
 
   #### **[O projeto em produção não disponibiliza a funcionabilidade de anexar arquivos!!!]**
+  
+## Layout
+![notes](https://github.com/user-attachments/assets/29cbc36f-a863-448b-b1bb-de93f4599829)
+![editing color](https://github.com/user-attachments/assets/a52791a0-8772-45d2-b88e-df1c0025ab57)
+![editing notes](https://github.com/user-attachments/assets/a01df22c-3186-465b-b5af-d6ccb5e682fe)
+![deleting notes](https://github.com/user-attachments/assets/ef43d055-4a14-4c45-9a09-e91e3216c4ab)
 
 ## Arquitetura
 
