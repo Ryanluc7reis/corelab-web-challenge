@@ -1,7 +1,5 @@
 # GambNotes - Frontend
 
-## Sobre a aplicação
-
 Essa aplicação foi contruída com ReactJs e Styled-components. A aplicação te oferece um gerenciador de tarefas com a possibilidade de marcar como favorito e anexar arquivos direto de sua máquina a favor de um layout simples, objetivo e responsivo.
 
 
