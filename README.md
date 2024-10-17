@@ -10,7 +10,7 @@ Essa aplicação foi contruída com ReactJs e Styled-components. A aplicação t
 
 - O frontend e backend foram hospedado na vercel.
 
-- Link do projeto em produção --> [CoreNotes projeto](https://corelab-web-challenge-ryanlucas.vercel.app/)
+- Link do projeto em produção --> [GambNotes projeto](https://corelab-web-challenge-ryanlucas.vercel.app/)
 
   #### **[O projeto em produção não disponibiliza a funcionabilidade de anexar arquivos!!!]**
   
